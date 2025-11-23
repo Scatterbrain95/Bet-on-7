@@ -6,7 +6,7 @@ enum GameStates{
   GAME,
   PAUSE,
   GAME_OVER
-}
+};
 
 extern GameStates state;
 extern long money;
@@ -21,7 +21,13 @@ typedef struct {
   bool active;
 } Item;
 
-extern Item = 
+typedef struct {
+  Item items;
+  int amount;
+}Slot;
+
+extern Item allItems[10];
+extern Slot items[10];
 
 void gameInit();
 void gameLoop();
