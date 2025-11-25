@@ -32,12 +32,15 @@
 
   void uiInit();
   void uiClear(uint16_t color);
-
+  void clearTextArea(int x, int y, int w, int h, uint16_t color);
   void uiSelect(int x, int y, int w, int h);
+  void textAnimation(const char* text, int y, int size, uint16_t color);
   void uiDrawCenteredText(const char* text, int y, int size, uint16_t color);
+  void uiDrawImage(int x,int y, const uint8_t*, int w, int h,uint16_t color);
   void uiDrawSlot(int x, int y, int w, int h, uint16_t color);
 
   void uiMainMenu();
+  void uiTutorial();
   void uiSlotMachine();
   void uiInventory();
   void uiShop();

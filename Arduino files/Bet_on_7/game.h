@@ -1,5 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
+#include "image.h"
 
 enum GameStates{
   MAIN_MENU = 0,
@@ -9,9 +10,15 @@ enum GameStates{
   SPINNING = 4,
   GAME_PAYING = 5,
   PAUSE = 6,
-  GAME_OVER = 7
+  GAME_OVER = 7,
+  TUTORIAL = 8
 };
 
+extern const short R_PIN;
+extern const short G_PIN;
+extern const short Y_PIN;
+extern const short B_PIN;
+extern int rState, gState, yState, bStatel;
 extern int currentRound;
 extern int turns;
 extern int amountSpins;
@@ -30,6 +37,7 @@ void handleInput(GameStates &currentState);
 void updateDebt();
 
 void mainUpdate();
+void tutorialUpdate();
 void slotUpdate();
 void shopUpdate();
 void inventoryUpdate();
