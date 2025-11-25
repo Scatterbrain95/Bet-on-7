@@ -21,13 +21,15 @@ float multiplierMultiplier;
 int currentRound;
 int turns;
 int amountSpins;
+bool played;
 
 void gameInit() {
     Serial.begin(9600);
     for(size_t i = R_PIN; i <= 37; i += 2){
       pinMode(i, INPUT_PULLUP);
     }
-    int rState, gState, yState, bState = 0;
+    rState, gState, yState, bState = 0;
+    played = false;
     currentRound = 1;
     turns = 3;
     state = MAIN_MENU;
@@ -49,6 +51,9 @@ void gameLoop(){
     case TUTORIAL:
       tutorialUpdate();
       break;
+    case GAME_SLOT:
+      slotUpdate();
+      break;
     default:
       break;
   }
@@ -67,17 +72,21 @@ void handleInput(GameStates &currentState){
   switch(currentState){
     case MAIN_MENU:
       if(bState == LOW){
-        state = TUTORIAL;
         uiClear(BLACK);
         delay(200);
+        state = GAME_SLOT;
       }
       break;
 
     case TUTORIAL:
-      if(gState == LOW){
+      if(gState== LOW){
         uiClear(BLACK);
         delay(200);
+        state = GAME_SLOT;
       }
+      break;
+
+    case GAME_SLOT:
       break;
 
     default:
@@ -92,42 +101,11 @@ void mainUpdate(){
 }
 
 void tutorialUpdate(){
-  bool dialoguePlayed = False;
-  size_t i = 0;
-  const char* dialogues[19]{
-    "Hello, hello ?",
-    "Hey new comer.",
-    "Seems you are also another \n addict join into the club.",
-    "Hmm..?",
-    "You just wanted to pay your \n \"debt\" ?",
-    "Well dipshit,we both know \n there were many other \n ways to earn money.",
-    "But you know what ? \n I prefer to get some \n money out of you.",
-    "You need to use the slot machine \n to gain money and pay your debt.",
-    "Your debt INCREASES more as game passes.",
-    "If you don't pay your debt..",
-    "You are a goner.",
-    "You buy bunch of TOKENS each TURN.",
-    "You can buy to 10 tokens.",
-    "But you at LEAST have to \n have three tokens each turn.",
-    "At the end of each round \n you have to have paid your debt.",
-    "You also gain some tickets \n at the end of each turn.",
-    "You can buy buffs for yourself \n with them and the coins you earned.",
-    "Well good luck.",
-    "Go make some profit for me."
-  };
-  int len = sizeof(dialogues) / sizeof(dialogues[0]);
+  uiTutorial(played);
+  handleInput(state);
+}
 
-  uiDrawImage((HEIGHT/2), (WIDTH/2)-100, telephoneImage, 160, 160, LIGHTGREY);
-
-  if (dialoguePlayed){
-    dialoguePlayed = false;
-    while (i < len){
-    textAnimation(dialogues[i], 250, 1, WHITE);
-    delay(3000);
-    clearTextArea(0,250,640,600,BLACK);
-    i++;
-    }
-  }
-  
+void slotUpdate(){
+  uiSlotMachine(false);
   handleInput(state);
 }

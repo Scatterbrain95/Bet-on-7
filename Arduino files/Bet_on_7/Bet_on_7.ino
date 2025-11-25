@@ -19,8 +19,9 @@ using namespace std;
 
 void setup() {
   Serial.begin(9600);
-  gameInit();
   uiInit();
+  initAllItems();
+  gameInit();
 }
 
 
