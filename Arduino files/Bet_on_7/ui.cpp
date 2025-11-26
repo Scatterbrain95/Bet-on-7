@@ -62,13 +62,12 @@ void uiCenteredText(const char* text, int y, int size, uint16_t color){
 void uiDrawSlot(int amount, int y, int w, int h, uint16_t color){
   int gap = 10;
   int totalWidth = amount * w + (amount - 1) * gap;
-  int xStart = (HEIGHT+140- totalWidth) / 2;
+  int xStart = (HEIGHT+140 - totalWidth) / 2;
   for(size_t i = 0; i < amount; i++){
     int x = xStart + i * (w + gap);
     tft.drawRoundRect(x,y,w,h,5,color);
   }
 }
-
 
 
 
@@ -118,12 +117,12 @@ void uiTutorial(bool& dialoguePlayed){
   uiCenteredText("PRESS G(REEN BUTTON) TO CONTINUE",250,1,WHITE);
 }
 
-void uiSlotMachine(bool draw){
+void uiSlotMachine(){
   size_t row = 3;
-  if (!draw){
-    draw = true;
-    for(size_t i = 0; i < row; i++){
-      uiDrawSlot(3,30+(i*80),70,70,WHITE);
-    }
+  for(size_t i = 0; i < row; i++){
+    uiDrawSlot(3,30+(i*80),70,70,WHITE);
   }
+  tft.drawRect(105, 20, 250, 250, WHITE);
+  tft.drawRect(95, 10, 270, 300, WHITE);
+  uiDrawImage((HEIGHT/2)+60,WIDTH+40,bananaImage,20,20,WHITE);
 }

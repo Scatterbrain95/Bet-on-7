@@ -106,6 +106,6 @@ void tutorialUpdate(){
 }
 
 void slotUpdate(){
-  uiSlotMachine(false);
+  uiSlotMachine();
   handleInput(state);
 }

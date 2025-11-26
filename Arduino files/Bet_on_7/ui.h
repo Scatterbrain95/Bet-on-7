@@ -43,7 +43,7 @@ void spinAnimation();
 
 void uiMainMenu();
 void uiTutorial(bool& dialoguePlayed);
-void uiSlotMachine(bool draw);
+void uiSlotMachine();
 void uiInventory();
 void uiShop();
 void uiPaying();

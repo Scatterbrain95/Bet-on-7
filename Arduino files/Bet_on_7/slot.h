@@ -1,4 +1,4 @@
-#ifndef slot_H
-#define slot_H
+#ifndef SLOT_H
+#define SLOT_H
 
 #endif
