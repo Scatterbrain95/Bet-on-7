@@ -124,5 +124,23 @@ void uiSlotMachine(){
   }
   tft.drawRect(105, 20, 250, 250, WHITE);
   tft.drawRect(95, 10, 270, 300, WHITE);
+  tft.drawRect(365, 10, 100, 300, WHITE);
+  
+  unsigned char* const imageArr[6] PROGMEM ={cherryImage,lemonImage,cloverImage,bellImage,diamondImage,sevenImage};
+  int imageColor[6] = {RED,YELLOW,GREEN,YELLOW,BLUE,RED};
+  String score[6] = {"2c","2c","3c","3c","5c","7c"};
+  for(size_t i = 0; i < 6; i++){
+    const unsigned char* img = (const unsigned char*)pgm_read_ptr(&imageArr[i]);
+    uiDrawImage(370, 15 + (i*50), imageArr[i] ,40,40, imageColor[i]);
+    tft.setTextSize(2);
+    tft.setTextColor(YELLOW);
+    tft.setCursor(425, 30 + (i*50));
+    tft.print(score[i]);
+  }
+
+  tft.drawRect(45, 10, 50, 300, WHITE);
+  tft.fillCircle(72, 40, 15, RED);
+  tft.drawLine(72,55,72,200,WHITE);
+
   uiDrawImage((HEIGHT/2)+60,WIDTH+40,bananaImage,20,20,WHITE);
 }
