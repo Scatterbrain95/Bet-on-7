@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "game.h"
 #include "image.h"
 MCUFRIEND_kbv tft;
 U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);
@@ -117,7 +118,7 @@ void uiTutorial(bool& dialoguePlayed){
   uiCenteredText("PRESS G(REEN BUTTON) TO CONTINUE",250,1,WHITE);
 }
 
-void uiSlotMachine(){
+void uiSlotMachine(bool& spin){
   size_t row = 3;
   for(size_t i = 0; i < row; i++){
     uiDrawSlot(3,30+(i*80),70,70,WHITE);
@@ -126,6 +127,20 @@ void uiSlotMachine(){
   tft.drawRect(95, 10, 270, 300, WHITE);
   tft.drawRect(365, 10, 100, 300, WHITE);
   
+  tft.drawRect(45, 10, 50, 300, WHITE);
+
+  if (!spin){
+    tft.fillCircle(72, 200, 15, BLACK);
+    tft.fillCircle(72, 40, 15, RED);
+    tft.drawLine(72,55,72,200,WHITE);
+  }else{
+    tft.fillCircle(72, 40, 15, BLACK);
+    tft.fillCircle(72, 200, 15, RED);
+    tft.drawLine(72,40,72,185,WHITE);
+  }
+
+  uiDrawImage((HEIGHT/2)+60,WIDTH+40,bananaImage,20,20,WHITE);
+
   unsigned char* const imageArr[6] PROGMEM ={cherryImage,lemonImage,cloverImage,bellImage,diamondImage,sevenImage};
   int imageColor[6] = {RED,YELLOW,GREEN,YELLOW,BLUE,RED};
   String score[6] = {"2c","2c","3c","3c","5c","7c"};
@@ -138,9 +153,33 @@ void uiSlotMachine(){
     tft.print(score[i]);
   }
 
-  tft.drawRect(45, 10, 50, 300, WHITE);
-  tft.fillCircle(72, 40, 15, RED);
-  tft.drawLine(72,55,72,200,WHITE);
+  
+}
 
-  uiDrawImage((HEIGHT/2)+60,WIDTH+40,bananaImage,20,20,WHITE);
+void uiPaying(){
+  tft.drawRect(105, 20, 250, 200, WHITE);
+  tft.drawRect(95, 10, 270, 300, WHITE);
+  tft.drawRect(130, 40, 200, 150, WHITE);
+  tft.drawRect(130, 240 , 130, 50, WHITE);
+  tft.drawRect(270, 240 , 20, 50, WHITE);
+  tft.drawRect(275, 245 , 10, 40, WHITE);
+  tft.drawRect(300, 240 , 50, 50, WHITE);
+
+  tft.setTextSize(3);
+  tft.setTextColor(YELLOW);
+  tft.setCursor(320,255);
+  tft.print("C");
+
+  String datanames[4] = {"TURNS: ", "Debt: ", "Deposite: ", "Multied: x"};
+  float data[4] = {turns,debt,deposit,debtMultiplier};
+
+  for(size_t i = 0; i < 5; i++){
+    tft.drawLine(140, 45 + (i*35), 320, 45 + (i*35), RED);
+  }
+  for(size_t i = 0; i < 4; i++){
+    tft.setTextSize(2);
+    tft.setTextColor(RED);
+    tft.setCursor(140,60 + (i*35));
+    tft.println(datanames[i]+data[i]);
+  }
 }

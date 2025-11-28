@@ -1,7 +1,7 @@
 #include "item.h"
 
-Item allItems[10];
-Item playerItems[4];
+const Item allItems[10];
+Item playerItems[3];
 
 void initAllItems(){
   extern Item allItems[10];

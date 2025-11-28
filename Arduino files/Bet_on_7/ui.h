@@ -39,15 +39,13 @@ void textAnimation(const char* text, int y, int size, uint16_t color);
 void uiDrawCenteredText(const char* text, int y, int size, uint16_t color);
 void uiDrawImage(int x,int y, const uint8_t*, int w, int h,uint16_t color);
 void uiDrawSlot(int amount, int x, int y, int w, int h, uint16_t color);
-void spinAnimation();
 
 void uiMainMenu();
 void uiTutorial(bool& dialoguePlayed);
-void uiSlotMachine();
+void uiSlotMachine(bool& spin);
+void uiPaying();
 void uiInventory();
 void uiShop();
-void uiPaying();
-void uiPauseMenu();
 void uiGameOver();
 
 #endif

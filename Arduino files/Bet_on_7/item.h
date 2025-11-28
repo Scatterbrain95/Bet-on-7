@@ -1,17 +1,17 @@
 #ifndef ITEM_H
 #define ITEM_H
+
 typedef struct {
   const char* name;
   int id;
   int power;
   const char* description;
-  bool active;
 } Item;
 
 
 
-extern Item allItems[10];
-extern Item playerItems[4];
+extern const Item allItems[10];
+extern Item playerItems[3];
 
 void initAllItems();
 
