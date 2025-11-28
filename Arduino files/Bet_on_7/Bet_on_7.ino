@@ -19,8 +19,10 @@ using namespace std;
 
 void setup() {
   Serial.begin(9600);
+  randomSeed(analogRead(A6));
   uiInit();
   initAllItems();
+  innitSlot();
   gameInit();
 }
 
