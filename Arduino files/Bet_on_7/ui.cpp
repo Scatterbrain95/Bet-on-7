@@ -2,7 +2,7 @@
 #include "slot.h"
 #include "game.h"
 #include "image.h"
-#include <map>
+
 
 MCUFRIEND_kbv tft;
 U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);
@@ -127,7 +127,8 @@ void uiTutorial(bool& dialoguePlayed){
 
 void uiSlotMachine(bool& spin){
   size_t row = 3;
-
+  unsigned char* const imageArr[6]={cherryImage,lemonImage,cloverImage,bellImage,diamondImage,sevenImage};
+  int imageColor[6] = {RED,YELLOW,GREEN,YELLOW,BLUE,RED};
   for(size_t i = 0; i < row; i++){
     uiDrawSlot(3,30+(i*80),70,70,WHITE);
   }
@@ -135,8 +136,8 @@ void uiSlotMachine(bool& spin){
   for(size_t i = 0; i < 3; i++){
     for(unsigned int l = 0; l < 3; l++){
       enumSymbols currentSymbol = allSlots[i][l].symbol;
-      const unsigned char* slotImg = (const unsigned char*)pgm_read_ptr(&imageArr[currentSymbol]);
-      
+      const unsigned char* slotImg = imageArr[currentSymbol];
+      uiDrawImage(130+(i*80),45+(l*80),slotImg,40,40,imageColor[currentSymbol]);
     }
   }
 
@@ -148,19 +149,21 @@ void uiSlotMachine(bool& spin){
   tft.drawLine(72,55,72,185,WHITE);
 
   if (!spin){
+    tft.fillCircle(72, 200, 15, BLACK);
     tft.fillCircle(72, 40, 15, RED);
   }else{
+    tft.fillCircle(72, 40, 15, BLACK);
     tft.fillCircle(72, 200, 15, RED);
   }
 
   uiDrawImage((HEIGHT/2)+60,WIDTH+40,bananaImage,20,20,WHITE);
 
   
-  int imageColor[6] = {RED,YELLOW,GREEN,YELLOW,BLUE,RED};
+  
   String score[6] = {"2c","2c","3c","3c","5c","7c"};
   for(size_t i = 0; i < 6; i++){
-    const unsigned char* img = (const unsigned char*)pgm_read_ptr(&imageArr[i]);
-    uiDrawImage(370, 15 + (i*50), imageArr[i] ,40,40, imageColor[i]);
+    const unsigned char* img = imageArr[i];
+    uiDrawImage(370, 15 + (i*50), img ,40,40, imageColor[i]);
     tft.setTextSize(2);
     tft.setTextColor(YELLOW);
     tft.setCursor(425, 30 + (i*50));

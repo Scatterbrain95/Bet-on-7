@@ -8,7 +8,7 @@ void innitSlot(){
   for(unsigned int i = 0; i < 3; i++){
     int num = random(0,5);
     for(unsigned int l = 0; l < 3; l++){
-      allSlots[i][l]=allSymbols[(num+l)%6)];
+      allSlots[i][l]=allSymbols[((num+l)%6)];
     }
   }
 }
