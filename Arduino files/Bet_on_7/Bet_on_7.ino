@@ -8,13 +8,6 @@
 #include "slot.h"
 #include "image.h"
 
-#include <Fonts/FreeSans9pt7b.h>
-#include <Fonts/FreeSansBold12pt7b.h>
-#include <Fonts/FreeMono12pt7b.h>
-#include <Fonts/FreeMonoBold12pt7b.h>
-#include <Fonts/FreeSerif12pt7b.h>
-#include <Fonts/FreeSerifBold12pt7b.h>
-
 using namespace std;
 
 void setup() {

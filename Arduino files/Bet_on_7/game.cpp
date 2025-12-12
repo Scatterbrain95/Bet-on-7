@@ -143,6 +143,7 @@ void tutorialUpdate(){
 
 void slotUpdate(){
   uiSlotMachine(event);
+  startSpin(event);
   handleInput(state,&event);
 }
 
