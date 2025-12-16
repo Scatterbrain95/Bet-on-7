@@ -152,6 +152,11 @@ void uiSlotMachine(bool& spin){
     tft.fillCircle(72, 200, 15, BLACK);
     tft.fillCircle(72, 40, 15, RED);
   }else{
+    for(size_t i = 0; i < 3; i++){
+      for(unsigned int l = 0; l < 3; l++){
+       tft.fillRect(130+(i*80),45+(l*80), 40,40, BLACK);
+      }
+    }
     tft.fillCircle(72, 40, 15, BLACK);
     tft.fillCircle(72, 200, 15, RED);
   }
@@ -170,10 +175,7 @@ void uiSlotMachine(bool& spin){
     tft.print(score[i]);
   }
 
-  
 }
-
-
 
 
 

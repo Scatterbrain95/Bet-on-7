@@ -109,9 +109,6 @@ void handleInput(GameStates &currentState, bool* event = nullptr){
       if(gState == LOW && rState != LOW && !(*event)){
         *event = true;
       }
-      if(rState == LOW && gState != LOW && (*event)){
-        *event = false;
-      }
       break;
 
     case GAME_PAYING:

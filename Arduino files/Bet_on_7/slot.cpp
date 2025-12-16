@@ -7,6 +7,7 @@ int x[3] ={};
 
 void innitSlot(){
   Serial.begin(9600);
+  randomSeed(analogRead(A6));
   for(unsigned int i = 0; i < 3; i++){
     int num = random(0,5);
     x[i] = num;
@@ -18,17 +19,37 @@ void innitSlot(){
 void resetSlot(){}
 
 void startSpin(bool& start){
-  while(start){
-    for(unsigned int i = 0; i < 3; i++){
-      int buff = 0;
-      for(unsigned int l = 0; l < 3; l++){
-        buff = x[i]+l%6;
-        allSlots[i][l]=allSymbols[(x[i]+l%6)];
-        delay(10);
+  if (!start) return;
+
+  int target[3];
+  for (int r = 0; r < 3; r++) {
+    target[r] = random(6);
+  }
+
+  int spins = random(20, 40);
+
+  for (int s = 0; s < spins; s++) {
+    for (int r = 0; r < 3; r++) {
+      x[r] = (x[r] + 1) % 6;
+      for (int row = 0; row < 3; row++) {
+        allSlots[r][row] = allSymbols[(x[r] + row) % 6];
       }
-      x[i] = buff;
+    }
+    delay(30);
+  }
+
+  for (int r = 0; r < 3; r++) {
+    while (x[r] != target[r]) {
+      x[r] = (x[r] + 1) % 6;
+      for (int row = 0; row < 3; row++) {
+        allSlots[r][row] = allSymbols[(x[r] + row) % 6];
+      }
+      delay(60 + r * 40);
     }
   }
+
+  start = false;
 }
+
 
 int patternRecognition(){return 1;}
