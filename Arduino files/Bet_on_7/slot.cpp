@@ -18,9 +18,7 @@ void innitSlot(){
 }
 void resetSlot(){}
 
-void startSpin(bool& start){
-  if (!start) return;
-
+int startSpin(){
   int target[3];
   for (int r = 0; r < 3; r++) {
     target[r] = random(6);
@@ -48,8 +46,41 @@ void startSpin(bool& start){
     }
   }
 
-  start = false;
+  int amount = patternRecognition();
+  return amount;
 }
 
 
-int patternRecognition(){return 1;}
+int patternRecognition(){
+  int sum = 0;
+  if (allSlots[0][1].symbol == allSlots[1][1].symbol && allSlots[1][1].symbol == allSlots[2][1].symbol) {
+    sum += allSlots[0][1].value * 3;
+  } 
+  else if (allSlots[1][1].symbol == allSlots[2][1].symbol || allSlots[0][1].symbol == allSlots[1][1].symbol)
+  {
+    sum += allSlots[1][1].value;
+  } 
+  else if (allSlots[0][1].symbol == allSlots[1][0].symbol && allSlots[1][0].symbol == allSlots[2][1].symbol)
+  {
+    sum += allSlots[0][1].value + allSlots[1][1].value;
+  }
+
+  if (allSlots[0][0].symbol == allSlots[1][1].symbol &&
+      allSlots[1][1].symbol == allSlots[2][2].symbol) {
+    sum += allSlots[1][1].value * 3;
+  }
+
+
+  if (allSlots[0][2].symbol == allSlots[1][1].symbol &&
+      allSlots[1][1].symbol == allSlots[2][0].symbol) {
+    sum += allSlots[1][1].value * 3;
+  }
+
+
+  if (allSlots[0][0].symbol == allSlots[2][0].symbol 
+  && allSlots[0][2].symbol == allSlots[1][1].symbol) {
+    sum += allSlots[0][0].value + allSlots[1][2].value;
+  }
+
+  return sum;
+}

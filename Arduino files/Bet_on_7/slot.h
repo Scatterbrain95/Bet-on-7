@@ -20,6 +20,6 @@
 
   void innitSlot();
   void resetSlot();
-  void startSpin(bool& start);
+  int startSpin();
   int patternRecognition();
 #endif

@@ -31,13 +31,17 @@ void gameInit() {
       pinMode(i, INPUT_PULLUP);
     }
     rState, gState, yState, bState = 0;
+
     played = false;
+    state = 0;
     currentRound = 1;
     turns = 3;
     state = MAIN_MENU;
+
     tickets = 2;
     money = 7;
     deposit = 0;
+
     debt = 30 * debtMultiplier;
     debtMultiplier = 1;
     multiplierMultiplier = 1.5;
@@ -87,7 +91,7 @@ void handleInput(GameStates &currentState, bool* event = nullptr){
         uiClear(BLACK);
         *event = false;
         delay(200);
-        state = GAME_SLOT;
+        currentState = GAME_SLOT;
       }
       break;
 
@@ -95,28 +99,29 @@ void handleInput(GameStates &currentState, bool* event = nullptr){
       if(gState== LOW){
         uiClear(BLACK);
         delay(200);
-        state = GAME_SLOT;
+        currentState = GAME_SLOT;
       }
       break;
 
     case GAME_SLOT:
-      if(bState== LOW){
+      if(bState== LOW && gState != LOW && !(*event)){
         *event = false;
         uiClear(BLACK);
         delay(200);
-        state = GAME_PAYING;
+        currentState = GAME_PAYING;
       }
-      if(gState == LOW && rState != LOW && !(*event)){
+      if(gState == LOW && !(*event)){
         *event = true;
       }
       break;
 
     case GAME_PAYING:
-      if(yState== LOW){
+      Serial.println(yState);
+      if(yState == LOW && !(*event)){
         *event = false;
         uiClear(BLACK);
         delay(200);
-        state = GAME_SLOT;
+        currentState = GAME_SLOT;
       }
       break;
 
@@ -137,14 +142,18 @@ void tutorialUpdate(){
 }
 
 
-
 void slotUpdate(){
   uiSlotMachine(event);
-  startSpin(event);
+  if (event) {
+    int amount = startSpin();
+    money += amount;
+    Serial.println(money);
+    event = false;
+  }
   handleInput(state,&event);
 }
 
 void payinGUpdate(){
   uiPaying();
-  handleInput(state);
+  handleInput(state, &event);
 }
