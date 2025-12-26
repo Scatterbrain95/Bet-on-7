@@ -23,10 +23,11 @@ extern int turns;
 extern int amountSpins;
 extern GameStates state;
 
+extern int tokens;
 extern int tickets;
 extern long money;
 extern long debt;
-extern long deposit;
+extern long deposite;
 extern float debtMultiplier;
 extern float multiplierMultiplier;
 
@@ -36,12 +37,12 @@ void tutorialUpdate();
 void slotUpdate();
 void shopUpdate();
 void inventoryUpdate();
-void payinGUpdate();
+void payingUpdate();
 void gameOverUpdate();
 
 void gameInit();
 void gameLoop();
-void handleInput(GameStates &currentState, bool* event = nullptr);
+void handleInput(GameStates &currentState, bool* event = nullptr, bool* select = nullptr);
 void updateDebt();
 
 #endif

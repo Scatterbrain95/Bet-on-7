@@ -178,6 +178,7 @@ void uiSlotMachine(bool& spin){
 }
 
 
+//drawing the ui for the ATM machine
 
 void uiPaying(){
   tft.drawRect(105, 20, 250, 200, WHITE);
@@ -193,9 +194,10 @@ void uiPaying(){
   tft.setCursor(320,255);
   tft.print("C");
 
-  String datanames[4] = {"TURNS: ", "Debt: ", "Deposite: ", "Multied: x"};
-  float data[4] = {turns,debt,deposit,debtMultiplier};
+  String datanames[4] = {"TURNS: ", "Debt: ", "Deposite: ", "Tokens: "};
+  float data[4] = {turns,debt,deposite,tokens};
 
+  //drawing the display and the data shown on the display
   for(size_t i = 0; i < 5; i++){
     tft.drawLine(140, 45 + (i*35), 320, 45 + (i*35), RED);
   }
@@ -205,4 +207,19 @@ void uiPaying(){
     tft.setCursor(140,60 + (i*35));
     tft.println(datanames[i]+data[i]);
   }
+}
+
+void clearData(int row, String str, float data){
+  int x = 140 + 12 * str.length();
+  int y = 60 + ((row-1) * 35);
+
+  int width  = 12 * 6;
+  int height = 16;
+
+  clearTextArea(x, y, width, height, BLACK);
+
+  tft.setTextSize(2);
+  tft.setTextColor(RED);
+  tft.setCursor(x, y);
+  tft.println(data);
 }

@@ -14,8 +14,9 @@ const short B_PIN = 37;
 int rState, gState, yState, bState;
 
 int tickets;
+int tokens;
 long money;
-long deposit;
+long deposite;
 long debt;
 float debtMultiplier;
 float multiplierMultiplier;
@@ -24,6 +25,7 @@ int turns;
 int amountSpins;
 bool played;
 bool event = false;
+bool select = false;
 
 void gameInit() {
     Serial.begin(9600);
@@ -38,14 +40,14 @@ void gameInit() {
     turns = 3;
     state = MAIN_MENU;
 
+    tokens = 0;
     tickets = 2;
     money = 7;
-    deposit = 0;
+    deposite = 0;
 
-    debt = 30 * debtMultiplier;
     debtMultiplier = 1;
     multiplierMultiplier = 1.5;
-
+    debt = 30;
 }
 
 void gameLoop(){
@@ -64,7 +66,7 @@ void gameLoop(){
       break;
 
     case GAME_PAYING:
-      payinGUpdate();
+      payingUpdate();
       break; 
 
 
@@ -79,7 +81,9 @@ void updateDebt(){
   debt *= debtMultiplier;
 }
 
-void handleInput(GameStates &currentState, bool* event = nullptr){
+void handleInput(GameStates &currentState, bool* event = nullptr, bool* select = nullptr){
+
+
   rState = digitalRead(R_PIN);
   gState = digitalRead(G_PIN);
   yState = digitalRead(Y_PIN);
@@ -89,7 +93,6 @@ void handleInput(GameStates &currentState, bool* event = nullptr){
     case MAIN_MENU:
       if(bState == LOW){
         uiClear(BLACK);
-        *event = false;
         delay(200);
         currentState = GAME_SLOT;
       }
@@ -104,6 +107,7 @@ void handleInput(GameStates &currentState, bool* event = nullptr){
       break;
 
     case GAME_SLOT:
+      *event = false;
       if(bState== LOW && gState != LOW && !(*event)){
         *event = false;
         uiClear(BLACK);
@@ -116,12 +120,49 @@ void handleInput(GameStates &currentState, bool* event = nullptr){
       break;
 
     case GAME_PAYING:
-      Serial.println(yState);
-      if(yState == LOW && !(*event)){
+      if(yState == LOW && !(*select)){
         *event = false;
+        *select = false;
         uiClear(BLACK);
         delay(200);
         currentState = GAME_SLOT;
+      }
+
+      if(gState == LOW && !(*select)){
+        *select = true;
+        delay(1500);
+      }
+
+      if(rState == LOW && (*select)){
+        *select = false;
+        delay(1500);
+      }
+
+      if(gState == LOW && (*select)){
+        if(money >= 4){
+          money -= 1;
+          deposite += 1;
+          clearData(3,"Deposite: ",deposite);
+          delay(500);
+        }
+      }
+
+      if(yState == LOW && (*select)){
+        if(money >= 9){
+          money -= 5;
+          deposite += 5;
+          clearData(3,"Deposite: ",deposite);
+          delay(500);
+        }
+      }
+
+      if(bState == LOW && (*select)){
+        if(money >= 4){
+          money -= 1;
+          tokens += 1;
+          clearData(4,"Tokens: ", tokens);
+          delay(500);
+        }
       }
       break;
 
@@ -153,7 +194,7 @@ void slotUpdate(){
   handleInput(state,&event);
 }
 
-void payinGUpdate(){
+void payingUpdate(){
   uiPaying();
-  handleInput(state, &event);
+  handleInput(state,&event,&select);
 }
