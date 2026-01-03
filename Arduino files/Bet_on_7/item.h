@@ -1,6 +1,6 @@
 #ifndef ITEM_H
 #define ITEM_H
-#include "game.h"
+
 
 #define PLAYER_ITEM_AMOUNT 3
 #define ITEMS_AMOUNT 8

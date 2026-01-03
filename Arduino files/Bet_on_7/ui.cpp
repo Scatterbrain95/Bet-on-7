@@ -1,7 +1,6 @@
 #include "ui.h"
 
 MCUFRIEND_kbv tft;
-U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);
 
 const int WIDTH = tft.width();
 const int HEIGHT = tft.height();
@@ -80,7 +79,6 @@ void uiMainMenu(){
 
 void uiTutorial(bool& dialoguePlayed){
   size_t i = 0;
-  const unsigned char* imageArr[6] PROGMEM ={cherryImage,lemonImage,cloverImage,bellImage,diamondImage,sevenImage};
   const char* dialogues[19]{
     "Hello, hello ?",
     "Hey new comer.",
@@ -103,7 +101,6 @@ void uiTutorial(bool& dialoguePlayed){
     "Go make some profit for me."
   };
   int len = sizeof(dialogues) / sizeof(dialogues[0]);
-
   uiDrawImage((HEIGHT/2), (WIDTH/2)-100, telephoneImage, 160, 160, LIGHTGREY);
 
   if (!dialoguePlayed){
@@ -226,3 +223,4 @@ void uiGameOver(bool win){
   
 }
 
+ 

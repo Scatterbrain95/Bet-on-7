@@ -3,14 +3,12 @@
 
 #include <MCUFRIEND_kbv.h>
 #include <Adafruit_GFX.h>
-#include <U8glib.h>
-#include "slot.h"
+#include "item.h"
 #include "game.h"
 #include "image.h"
-#include "item.h"
+#include "slot.h"
 #include "shop.h"
 
-extern U8GLIB_SSD1306_128X64 u8g;
 #define BLACK       0x0000
 #define NAVY        0x000F
 #define DARKGREEN   0x03E0
@@ -32,6 +30,8 @@ extern U8GLIB_SSD1306_128X64 u8g;
 #define PINK        0xF81F
 
 extern MCUFRIEND_kbv tft;
+
+
 
 extern const int WIDTH;
 extern const int HEIGHT; 

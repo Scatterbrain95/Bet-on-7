@@ -1,10 +1,11 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef SHOP_H
+#define SHOP_H
 
-#include "item.h"
 #include "game.h"
+#include "item.h"
+
 #include <Arduino.h>
-Item shopItems[3];
+extern Item shopItems[3];
 bool shopHasItem();
 void buyItem();
 void shopReset();

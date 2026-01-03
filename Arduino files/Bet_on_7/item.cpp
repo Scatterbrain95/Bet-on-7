@@ -1,5 +1,5 @@
 #include "item.h"
-
+#include "game.h"
 
 const Item allItems[ITEMS_AMOUNT]{
   {"Double Crosser",1,1.5,"Diagonal matches will give 1.5x of the coin./",2},

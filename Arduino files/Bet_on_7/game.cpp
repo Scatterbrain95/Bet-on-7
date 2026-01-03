@@ -1,6 +1,5 @@
 #include "game.h"
 
-SoftwareSerial peripheralSerial(22, 23);
 
 GameStates state;
 
