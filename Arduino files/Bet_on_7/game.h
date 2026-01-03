@@ -1,6 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "item.h"
+#include "ui.h"
+#include "slot.h"
+#include "shop.h"
 #include "image.h"
 
 enum GameStates{
@@ -38,8 +42,9 @@ void slotUpdate();
 void shopUpdate();
 void inventoryUpdate();
 void payingUpdate();
-void gameOverUpdate();
+void gameOverUpdate(int condition);
 
+int gameCondition();
 void gameInit();
 void gameLoop();
 void handleInput(GameStates &currentState, bool* event = nullptr, bool* select = nullptr);

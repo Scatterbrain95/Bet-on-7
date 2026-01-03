@@ -1,6 +1,8 @@
 #ifndef SLOT_H
 #define SLOT_H
 
+  #include <Arduino.h>
+
   enum enumSymbols{
     CHERRY=0,
     LEMON=1,
@@ -22,4 +24,5 @@
   void resetSlot();
   int startSpin();
   int patternRecognition();
+  
 #endif

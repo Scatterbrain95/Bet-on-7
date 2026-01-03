@@ -1,8 +1,4 @@
 #include "ui.h"
-#include "slot.h"
-#include "game.h"
-#include "image.h"
-
 
 MCUFRIEND_kbv tft;
 U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);
@@ -58,8 +54,8 @@ void uiCenteredText(const char* text, int y, int size, uint16_t color){
   uint16_t w, h;
   tft.setTextSize(size);
   tft.setTextColor(color);
-  tft.setCursor((HEIGHT - h)/2, y);
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
+  tft.setCursor((HEIGHT - h)/2, y);
   tft.print(text);
 }
 
@@ -97,11 +93,11 @@ void uiTutorial(bool& dialoguePlayed){
     "Your debt INCREASES more as game passes.",
     "If you don't pay your debt..",
     "You are a goner.",
-    "You buy bunch of TOKENS each TURN.",
-    "You can buy to 10 tokens.",
-    "But you at LEAST have to \n have three tokens each turn.",
+    "You buy bunch of TICKETS each TURN.",
+    "You can buy to 10 TICKETS.",
+    "But you at LEAST have to \n have 3 tickets each turn.",
     "At the end of each round \n you have to have paid your debt.",
-    "You also gain some tickets \n at the end of each turn.",
+    "You also gain some tokens \n at the end of each turn.",
     "You can buy buffs for yourself \n with them and the coins you earned.",
     "Well good luck.",
     "Go make some profit for me."
@@ -194,8 +190,8 @@ void uiPaying(){
   tft.setCursor(320,255);
   tft.print("C");
 
-  String datanames[4] = {"TURNS: ", "Debt: ", "Deposite: ", "Tokens: "};
-  float data[4] = {turns,debt,deposite,tokens};
+  String datanames[4] = {"TURNS: ", "Debt: ", "Deposite: ", "Tickets: "};
+  float data[4] = {turns,debt,deposite,tickets};
 
   //drawing the display and the data shown on the display
   for(size_t i = 0; i < 5; i++){
@@ -210,16 +206,23 @@ void uiPaying(){
 }
 
 void clearData(int row, String str, float data){
-  int x = 140 + 12 * str.length();
+  int x = 140 + 10 * str.length();
   int y = 60 + ((row-1) * 35);
 
   int width  = 12 * 6;
   int height = 16;
 
   clearTextArea(x, y, width, height, BLACK);
-
-  tft.setTextSize(2);
-  tft.setTextColor(RED);
-  tft.setCursor(x, y);
-  tft.println(data);
 }
+
+void uiGameOver(bool win){
+  if (win){
+    uiCenteredText("YOU PAID YOUR DEBT", 100, 3, win);
+    uiCenteredText("Press G(reen) to restart",250,1,WHITE);
+  }else{
+    uiCenteredText("GAME OVER", 100, 3, RED);
+    uiCenteredText("Press G(reen) to restart",250,1,WHITE);
+  }
+  
+}
+

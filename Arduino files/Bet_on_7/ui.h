@@ -4,6 +4,11 @@
 #include <MCUFRIEND_kbv.h>
 #include <Adafruit_GFX.h>
 #include <U8glib.h>
+#include "slot.h"
+#include "game.h"
+#include "image.h"
+#include "item.h"
+#include "shop.h"
 
 extern U8GLIB_SSD1306_128X64 u8g;
 #define BLACK       0x0000
@@ -47,6 +52,6 @@ void uiSlotMachine(bool& spin);
 void uiPaying();
 void uiInventory();
 void uiShop();
-void uiGameOver();
+void uiGameOver(bool win);
 
 #endif

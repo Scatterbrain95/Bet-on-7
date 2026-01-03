@@ -1,8 +1,59 @@
 #include "item.h"
 
-const Item allItems[10];
-Item playerItems[3];
 
-void initAllItems(){
-  Item allItems[10];
+const Item allItems[ITEMS_AMOUNT]{
+  {"Double Crosser",1,1.5,"Diagonal matches will give 1.5x of the coin./",2},
+  {"Four eyes", 2, 2,"Two slot matches is doubled",4},
+  {"Up and Down", 3, 1.5, "Arrow matches will give 1.5x of the coin.",2},
+  {"One and only", 4, 2,"If you got no matches, you'll gain the coins of the first slots coin.",5},
+  {"Angela",5, 2,"In case of losing, it will be used and give you 3 extra turns to pay your debt.",6},
+  {"\"I'll pay you tomorrow\"",6, 2,"Gets two extra turn while having this item each round.",6},
+  {"JACKPOT",7, 3,"One jackpot and you'll be rich. Jackpot's coin will be tripled.",7},
+  {"All rounder", 8, 1.25, "All of the matches will be multiplied 1.25x.",10}
 };
+Item playerItems[PLAYER_ITEM_AMOUNT]{};
+unsigned itemExist = 0;
+
+void addPlayerItem(int id) {
+  if (itemExist >= PLAYER_ITEM_AMOUNT) return;
+
+  for (unsigned i = 0; i < ITEMS_AMOUNT; i++) {
+    if (id == allItems[i].id) {
+      playerItems[itemExist++] = allItems[i];
+      return;
+    }
+  }
+}
+
+
+float itemAbility(int id){
+  int index = findPlayerItemIndex(id);
+  if (index < 0) return 1;
+  return playerItems[index].power;
+}
+void sellItem(int id){
+  int index = findPlayerItemIndex(id);
+  if (index < 0) return;
+  tokens += playerItems[index].value;
+  takeAwayItem(id);
+}
+
+void takeAwayItem(int id){
+  int index = findPlayerItemIndex(id);
+  if (index < 0) return;
+
+  for (unsigned i = index; i < itemExist - 1; i++) {
+    playerItems[i] = playerItems[i + 1];
+  }
+
+  itemExist--;
+}
+
+int findPlayerItemIndex(int id) {
+  for (unsigned i = 0; i < itemExist; i++) {
+    if (playerItems[i].id == id) {
+      return i;
+    }
+  }
+  return -1; 
+}

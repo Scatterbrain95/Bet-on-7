@@ -1,5 +1,5 @@
 #include "slot.h";
-#include <Arduino.h>
+
 
 const Symbols allSymbols[6] = {{1,CHERRY},{1,LEMON},{3,CLOVER},{3,BELL},{5,DIAMOND},{7,SEVEN}};
 Symbols allSlots[3][3];

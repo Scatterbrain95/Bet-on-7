@@ -1,8 +1,4 @@
 #include "game.h"
-#include "item.h"
-#include "ui.h"
-#include "slot.h"
-
 
 GameStates state;
 
@@ -26,6 +22,13 @@ int amountSpins;
 bool played;
 bool event = false;
 bool select = false;
+bool nextTurn = true;
+
+enum GameResult {
+  CONTINUE,
+  WIN,
+  LOSE
+};
 
 void gameInit() {
     Serial.begin(9600);
@@ -41,7 +44,7 @@ void gameInit() {
     state = MAIN_MENU;
 
     tokens = 0;
-    tickets = 2;
+    tickets = 5;
     money = 7;
     deposite = 0;
 
@@ -51,6 +54,18 @@ void gameInit() {
 }
 
 void gameLoop(){
+
+  int condition = (GameResult)gameCondition();
+  if(condition != 0){
+    state = GAME_OVER;
+  }
+  if(tickets <= 0 && nextTurn){
+    nextTurn = false;
+    turns -=1;
+  }
+  if(tickets >= 3){
+    nextTurn = true;
+  }
   switch(state){
 
     case MAIN_MENU:
@@ -69,10 +84,18 @@ void gameLoop(){
       payingUpdate();
       break; 
 
+    case SHOP_MENU:
+      shopUpdate();
+      break;
+
+    case GAME_OVER:
+      gameOverUpdate(condition);
+      break;
 
     default:
       break;
   }
+
 }
 
 void updateDebt(){
@@ -81,17 +104,26 @@ void updateDebt(){
   debt *= debtMultiplier;
 }
 
-void handleInput(GameStates &currentState, bool* event = nullptr, bool* select = nullptr){
-
+void handleInput(GameStates &currentState, bool* event = nullptr, bool* select = nullptr) {
 
   rState = digitalRead(R_PIN);
   gState = digitalRead(G_PIN);
   yState = digitalRead(Y_PIN);
   bState = digitalRead(B_PIN);
 
-  switch(currentState){
+  static GameStates lastState = currentState;
+
+  if (currentState != lastState) {
+    if (event)  *event  = false;
+    if (select) *select = false;
+
+    lastState = currentState;
+  }
+
+  switch (currentState) {
+
     case MAIN_MENU:
-      if(bState == LOW){
+      if (bState == LOW) {
         uiClear(BLACK);
         delay(200);
         currentState = GAME_SLOT;
@@ -99,7 +131,7 @@ void handleInput(GameStates &currentState, bool* event = nullptr, bool* select =
       break;
 
     case TUTORIAL:
-      if(gState== LOW){
+      if (gState == LOW) {
         uiClear(BLACK);
         delay(200);
         currentState = GAME_SLOT;
@@ -107,62 +139,88 @@ void handleInput(GameStates &currentState, bool* event = nullptr, bool* select =
       break;
 
     case GAME_SLOT:
-      *event = false;
-      if(bState== LOW && gState != LOW && !(*event)){
-        *event = false;
+      if (bState == LOW && gState != LOW && event && !(*event)) {
         uiClear(BLACK);
         delay(200);
         currentState = GAME_PAYING;
       }
-      if(gState == LOW && !(*event)){
+
+      if (gState == LOW && event && tickets > 0  ) {
         *event = true;
       }
       break;
 
     case GAME_PAYING:
-      if(yState == LOW && !(*select)){
-        *event = false;
-        *select = false;
+
+      if (yState == LOW && select && !(*select)) {
         uiClear(BLACK);
         delay(200);
         currentState = GAME_SLOT;
       }
 
-      if(gState == LOW && !(*select)){
+      if (bState == LOW && select && !(*select)) {
+        uiClear(BLACK);
+        delay(200);
+        currentState = SHOP_MENU;
+      }
+
+      if (gState == LOW && select && !(*select)) {
+        *select = true;
+        delay(2000);
+      }
+
+      if (rState == LOW && select && (*select)) {
+        *select = false;
+        delay(2000);
+      }
+
+      if (select && (*select)) {
+
+        if (gState == LOW && money >= 4) {
+          money -= 1;
+          deposite += 1;
+          clearData(3, "Deposite: ", deposite);
+          delay(500);
+        }
+
+        if (yState == LOW && money >= 9) {
+          money -= 5;
+          deposite += 5;
+          clearData(3, "Deposite: ", deposite);
+          delay(500);
+        }
+
+        if (bState == LOW && money >= 4) {
+          money -= 1;
+          tickets += 1;
+          clearData(4, "Tickets: ", tickets);
+          delay(500);
+        }
+      }
+      break;
+
+    case SHOP_MENU:
+
+      if (yState == LOW && select && !(*select)) {
+        uiClear(BLACK);
+        delay(200);
+        currentState = GAME_PAYING;
+      }
+
+      if (bState == LOW && select && !(*select)) {
+        uiClear(BLACK);
+        delay(200);
+        currentState = INVENTORY_MENU;
+      }
+
+      if (gState == LOW && select && !(*select)) {
         *select = true;
         delay(1500);
       }
 
-      if(rState == LOW && (*select)){
+      if (rState == LOW && select && (*select)) {
         *select = false;
         delay(1500);
-      }
-
-      if(gState == LOW && (*select)){
-        if(money >= 4){
-          money -= 1;
-          deposite += 1;
-          clearData(3,"Deposite: ",deposite);
-          delay(500);
-        }
-      }
-
-      if(yState == LOW && (*select)){
-        if(money >= 9){
-          money -= 5;
-          deposite += 5;
-          clearData(3,"Deposite: ",deposite);
-          delay(500);
-        }
-      }
-
-      if(bState == LOW && (*select)){
-        if(money >= 4){
-          money -= 1;
-          tokens += 1;
-          clearData(4,"Tokens: ", tokens);
-          delay(500);
-        }
       }
       break;
 
@@ -170,6 +228,29 @@ void handleInput(GameStates &currentState, bool* event = nullptr, bool* select =
       uiClear(BLACK);
       break;
   }
+}
+
+int gameCondition() {
+
+
+  if (currentRound == 5 && deposite >= debt && turns > 0) {
+    return 1;
+  }
+
+
+  if (money == 0 && deposite < debt && turns <= 0) {
+    return 2;
+  }
+
+
+  return 0;
+}
+
+
+void nextRound(){
+  currentRound += 1;
+  updateDebt();
+  turns = 5;
 }
 
 void mainUpdate(){
@@ -186,6 +267,7 @@ void tutorialUpdate(){
 void slotUpdate(){
   uiSlotMachine(event);
   if (event) {
+    tickets -= 1;
     int amount = startSpin();
     money += amount;
     Serial.println(money);
@@ -197,4 +279,17 @@ void slotUpdate(){
 void payingUpdate(){
   uiPaying();
   handleInput(state,&event,&select);
+}
+
+void shopUpdate(){
+  handleInput(state,nullptr,&select);
+}
+
+void gameOverUpdate(int condition){
+  if (condition == 1){
+    uiGameOver(true);
+  }
+  if(condition == 2){
+    uiGameOver(false);
+  }
 }
