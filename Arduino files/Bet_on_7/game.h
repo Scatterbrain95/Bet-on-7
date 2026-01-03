@@ -6,6 +6,9 @@
 #include "slot.h"
 #include "shop.h"
 #include "image.h"
+#include <SoftwareSerial.h>
+
+extern SoftwareSerial peripheralSerial;
 
 enum GameStates{
   MAIN_MENU = 0,

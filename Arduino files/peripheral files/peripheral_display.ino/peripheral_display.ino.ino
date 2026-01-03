@@ -1,3 +1,8 @@
+#include <Arduino.h>
+#include <U8glib.h>
+#include <Wire.h>
+U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);
+
 void setup() {
   // put your setup code here, to run once:
 

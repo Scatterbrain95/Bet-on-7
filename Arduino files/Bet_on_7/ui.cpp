@@ -80,7 +80,7 @@ void uiMainMenu(){
 
 void uiTutorial(bool& dialoguePlayed){
   size_t i = 0;
-  unsigned char* const imageArr[6] PROGMEM ={cherryImage,lemonImage,cloverImage,bellImage,diamondImage,sevenImage};
+  const unsigned char* imageArr[6] PROGMEM ={cherryImage,lemonImage,cloverImage,bellImage,diamondImage,sevenImage};
   const char* dialogues[19]{
     "Hello, hello ?",
     "Hey new comer.",
