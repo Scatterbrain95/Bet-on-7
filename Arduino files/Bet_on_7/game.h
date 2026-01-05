@@ -6,6 +6,7 @@
 #include "slot.h"
 #include "shop.h"
 #include "image.h"
+#include "components.h"
 #include <SoftwareSerial.h>
 
 extern SoftwareSerial peripheralSerial;
@@ -24,7 +25,7 @@ extern const short R_PIN;
 extern const short G_PIN;
 extern const short Y_PIN;
 extern const short B_PIN;
-extern int rState, gState, yState, bStatel;
+extern int rState, gState, yState, bState;
 extern int currentRound;
 extern int turns;
 extern int amountSpins;
@@ -34,7 +35,7 @@ extern int tokens;
 extern int tickets;
 extern long money;
 extern long debt;
-extern long deposite;
+extern long deposit;
 extern float debtMultiplier;
 extern float multiplierMultiplier;
 
@@ -47,10 +48,11 @@ void inventoryUpdate();
 void payingUpdate();
 void gameOverUpdate(int condition);
 
+void nextRound();
 int gameCondition();
 void gameInit();
 void gameLoop();
 void handleInput(GameStates &currentState, bool* event = nullptr, bool* select = nullptr);
 void updateDebt();
-
+void startNewGame();
 #endif

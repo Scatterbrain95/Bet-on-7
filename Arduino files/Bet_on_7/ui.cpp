@@ -2,8 +2,8 @@
 
 MCUFRIEND_kbv tft;
 
-const int WIDTH = tft.width();
-const int HEIGHT = tft.height();
+const int WIDTH = tft.width() ;
+const int HEIGHT = tft.height() ;
 uint16_t ID;
 
 void uiInit(){
@@ -12,8 +12,6 @@ void uiInit(){
   tft.begin(ID);
   tft.setRotation(1);
   tft.fillScreen(BLACK);
-  Serial.println(WIDTH);
-  Serial.println(HEIGHT);
 }
 
 
@@ -72,7 +70,7 @@ void uiDrawSlot(int amount, int y, int w, int h, uint16_t color){
 
 
 void uiMainMenu(){
-  uiCenteredText("B E T  O N  7",100,3,WHITE);
+  uiCenteredText("BET ON 7",100,3,WHITE);
   uiCenteredText("PRESS ANY BUTTON TO PLAY",250,1,WHITE);
 }
 
@@ -106,7 +104,7 @@ void uiTutorial(bool& dialoguePlayed){
   if (!dialoguePlayed){
     dialoguePlayed = true;
     while (i < len){
-    textAnimation(dialogues[i], 250, 1, WHITE);
+    textAnimation(dialogues[i], 250, 1, YELLOW);
     delay(3000);
     clearTextArea(0,250,640,600,BLACK);
     i++;
@@ -187,8 +185,8 @@ void uiPaying(){
   tft.setCursor(320,255);
   tft.print("C");
 
-  String datanames[4] = {"TURNS: ", "Debt: ", "Deposite: ", "Tickets: "};
-  float data[4] = {turns,debt,deposite,tickets};
+  String datanames[4] = {"TURNS: ", "Debt: ", "deposit: ", "Tickets: "};
+  float data[4] = {turns,debt,deposit,tickets};
 
   //drawing the display and the data shown on the display
   for(size_t i = 0; i < 5; i++){
@@ -212,9 +210,88 @@ void clearData(int row, String str, float data){
   clearTextArea(x, y, width, height, BLACK);
 }
 
+
+void uiShop(int indx, int lastIndx, bool& event){
+  static int lastShopCount = 3;
+  tft.drawRect(105, 20, 250, 100, WHITE);
+  tft.drawRect(105, 135, 250, 150, WHITE);
+  uiDrawSlot(3,175,70,70,DARKGREY );
+  unsigned char* const imageArr[8]={cross,eyeglasses,down_arrow,one,wing,calendar,sevenImage,eye};
+  int imageColor[8] = {RED,WHITE,WHITE,YELLOW,YELLOW,WHITE,RED,BLUE};
+
+  if(indx >= 0 && indx < shopItemCount && lastIndx == -1){
+    tft.drawRoundRect(115,175,70,70,5,WHITE);
+  }else if(indx >= 0 && indx < shopItemCount && lastIndx != -1){
+    int x = 115 + indx * (70 + 10);
+    int x2 = 115 + lastIndx * (70 + 10);
+    tft.drawRoundRect(x2,175,70,70,5,DARKGREY);
+    tft.drawRoundRect(x,175,70,70,5,WHITE);
+  }
+
+  if(event){
+    for(unsigned int i = 0; i < 3; i++){
+      tft.fillRect(130+(i*80),190, 40,40, BLACK);
+    }
+    delay(500);
+    event = false;
+  }else{
+      for(size_t i = 0; i < shopItemCount; i++){
+        int itemIndx = shopItems[i].id-1;
+        if (itemIndx < 0 || itemIndx >= 8) continue;
+        const unsigned char* slotImg = imageArr[itemIndx];
+        uiDrawImage(130+(i*80),190,slotImg,40,40,imageColor[itemIndx]);
+      }
+  }
+
+  if (shopItemCount != lastShopCount) {
+      clearTextArea(110, 25, 240, 90, BLACK);
+
+      lastShopCount = shopItemCount;
+  }
+  if (shopItemCount <= 0) {
+    uiCenteredText("SOLD OUT", 50, 4, RED);
+  } else {
+    uiCenteredText("SHOP", 50, 4, BLUE);
+  } 
+}
+
+void uiInventory(int indx, int lastIndx,bool& event){
+  uiCenteredText("INVENTORY", 50, 4, YELLOW);
+  uiDrawSlot(3,175,70,70,DARKGREY );
+  unsigned char* const imageArr[8]={cross,eyeglasses,down_arrow,one,wing,calendar,sevenImage,eye};
+  int imageColor[8] = {RED,WHITE,WHITE,YELLOW,YELLOW,WHITE,RED,BLUE};
+
+
+  if(event){
+    for(unsigned int i = 0; i < 3; i++){
+      tft.fillRect(130+(i*80),190, 40,40, BLACK);
+    }
+    event = false;
+  }else{
+      for(size_t i = 0; i < itemExist; i++){
+        int itemIndx = playerItems[i].id-1;
+        if (itemIndx < 0 || itemIndx >= 8) continue;
+        if (playerItems[i].id == 0) {
+          continue;
+        }
+        const unsigned char* slotImg = imageArr[itemIndx];
+        uiDrawImage(130+(i*80),190,slotImg,40,40,imageColor[itemIndx]);
+      }
+  }
+  if(indx >= 0 && indx < itemExist && lastIndx == -1){
+    tft.drawRoundRect(115,175,70,70,5,WHITE);
+  }else if(indx >= 0 && indx < itemExist && lastIndx != -1){
+    int x = 115 + indx * (70 + 10);
+    int x2 = 115 + lastIndx * (70 + 10);
+    tft.drawRoundRect(x2,175,70,70,5,DARKGREY);
+    tft.drawRoundRect(x,175,70,70,5,WHITE);
+  }
+}
+
 void uiGameOver(bool win){
   if (win){
-    uiCenteredText("YOU PAID YOUR DEBT", 100, 3, win);
+    uiCenteredText("YOU PAID", 100, 3, GREEN);
+    uiCenteredText("YOUR DEBT", 150, 3, GREEN);
     uiCenteredText("Press G(reen) to restart",250,1,WHITE);
   }else{
     uiCenteredText("GAME OVER", 100, 3, RED);

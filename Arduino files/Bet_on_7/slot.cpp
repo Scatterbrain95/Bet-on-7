@@ -47,40 +47,53 @@ int startSpin(){
   }
 
   int amount = patternRecognition();
+  Ledstate = OFF;
   return amount;
 }
 
 
 int patternRecognition(){
   int sum = 0;
+  bool matched = false;
+
   if (allSlots[0][1].symbol == allSlots[1][1].symbol && allSlots[1][1].symbol == allSlots[2][1].symbol) {
-    sum += allSlots[0][1].value * 3;
+    matched = true;
+    if(allSlots[0][1].symbol == SEVEN && findPlayerItemIndex(7) > -1){
+      sum += allSlots[0][1].value * 3 * itemAbility(7);
+    }
+    else{
+      sum += allSlots[0][1].value * 3;
+    }
   } 
   else if (allSlots[1][1].symbol == allSlots[2][1].symbol || allSlots[0][1].symbol == allSlots[1][1].symbol)
   {
-    sum += allSlots[1][1].value;
+    matched = true;
+    sum += allSlots[1][1].value * itemAbility(2);
   } 
   else if (allSlots[0][1].symbol == allSlots[1][0].symbol && allSlots[1][0].symbol == allSlots[2][1].symbol)
   {
-    sum += allSlots[0][1].value + allSlots[1][1].value;
+    matched = true;
+    sum += (allSlots[0][1].value + allSlots[1][1].value) * itemAbility(3);
   }
 
-  if (allSlots[0][0].symbol == allSlots[1][1].symbol &&
-      allSlots[1][1].symbol == allSlots[2][2].symbol) {
-    sum += allSlots[1][1].value * 3;
-  }
-
-
-  if (allSlots[0][2].symbol == allSlots[1][1].symbol &&
-      allSlots[1][1].symbol == allSlots[2][0].symbol) {
-    sum += allSlots[1][1].value * 3;
+  if (allSlots[0][0].symbol == allSlots[1][1].symbol && allSlots[1][1].symbol == allSlots[2][2].symbol) {
+    matched = true;
+    sum += allSlots[1][1].value * 3 * itemAbility(1);
   }
 
 
-  if (allSlots[0][0].symbol == allSlots[2][0].symbol 
-  && allSlots[0][2].symbol == allSlots[1][1].symbol) {
-    sum += allSlots[0][0].value + allSlots[1][2].value;
+  if (allSlots[0][2].symbol == allSlots[1][1].symbol && allSlots[1][1].symbol == allSlots[2][0].symbol) {
+    matched = true;
+    sum += allSlots[1][1].value * 3 * itemAbility(1);
   }
 
-  return sum;
+
+  if (allSlots[0][0].symbol == allSlots[0][2].symbol && allSlots[0][2].symbol == allSlots[1][1].symbol) {
+    matched = true;
+    sum += (allSlots[0][0].value + allSlots[1][2].value) * itemAbility(3);
+  }
+  if(matched == false && itemAbility(4) == 2){
+    sum += allSlots[0][1].value; 
+  }
+  return sum * itemAbility(8);
 }

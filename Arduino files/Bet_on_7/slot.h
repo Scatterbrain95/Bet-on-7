@@ -2,7 +2,8 @@
 #define SLOT_H
 
   #include <Arduino.h>
-
+  #include "item.h"
+  #include "components.h"
   enum enumSymbols{
     CHERRY=0,
     LEMON=1,

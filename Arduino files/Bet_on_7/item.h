@@ -22,8 +22,8 @@ extern unsigned itemExist;
 int findPlayerItemIndex(int id);
 void addPlayerItem(int id);
 float itemAbility(int id);
-void sellItem(int id);
+bool sellItem(int index);
 void takeAwayItem(int id);
-
+void activateAngela();
 
 #endif

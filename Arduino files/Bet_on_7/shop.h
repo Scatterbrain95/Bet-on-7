@@ -6,8 +6,9 @@
 
 #include <Arduino.h>
 extern Item shopItems[3];
-bool shopHasItem();
-void buyItem();
+extern int shopItemCount; 
+bool shopHasItem(int id, int count);
+bool buyItem(int index);
 void shopReset();
 void shopInit();
 

@@ -50,8 +50,8 @@ void uiMainMenu();
 void uiTutorial(bool& dialoguePlayed);
 void uiSlotMachine(bool& spin);
 void uiPaying();
-void uiInventory();
-void uiShop();
+void uiInventory(int indx, int lastIndx, bool& event);
+void uiShop(int indx, int lastIndx, bool& event);
 void uiGameOver(bool win);
 
 #endif
