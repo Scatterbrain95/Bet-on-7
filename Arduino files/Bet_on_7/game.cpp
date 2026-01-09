@@ -144,10 +144,15 @@ void handleInput(GameStates &currentState, bool* event = nullptr, bool* select =
   switch (currentState) {
 
     case MAIN_MENU:
-      if (bState == LOW) {
+      if (gState == LOW) {
         uiClear(BLACK);
         delay(200);
         currentState = TUTORIAL;
+      }
+      if (bState == LOW) {
+        uiClear(BLACK);
+        delay(200);
+        currentState = GAME_SLOT;
       }
       lastGState = gState;
       lastYState = yState;

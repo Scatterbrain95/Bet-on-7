@@ -71,7 +71,8 @@ void uiDrawSlot(int amount, int y, int w, int h, uint16_t color){
 
 void uiMainMenu(){
   uiCenteredText("BET ON 7",100,3,WHITE);
-  uiCenteredText("PRESS B(LUE) BUTTON TO PLAY",250,1,WHITE);
+  uiCenteredText("PRESS G(REEN) BUTTON TO PLAY",250,1,WHITE);
+  uiCenteredText("PRESS B(LUE) BUTTON TO ALSO SKIP THE CUT SCENE",270,1,WHITE);
 }
 
 
