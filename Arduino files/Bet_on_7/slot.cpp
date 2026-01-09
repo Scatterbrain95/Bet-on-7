@@ -70,7 +70,7 @@ int patternRecognition(){
     matched = true;
     sum += allSlots[1][1].value * itemAbility(2);
   } 
-  else if (allSlots[0][1].symbol == allSlots[1][0].symbol && allSlots[1][0].symbol == allSlots[2][1].symbol)
+  else if (allSlots[1][0].symbol == allSlots[0][1].symbol && allSlots[0][1].symbol == allSlots[2][1].symbol)
   {
     matched = true;
     sum += (allSlots[0][1].value + allSlots[1][1].value) * itemAbility(3);
@@ -88,9 +88,9 @@ int patternRecognition(){
   }
 
 
-  if (allSlots[0][0].symbol == allSlots[0][2].symbol && allSlots[0][2].symbol == allSlots[1][1].symbol) {
+  if (allSlots[0][0].symbol == allSlots[2][0].symbol && allSlots[2][0].symbol == allSlots[1][1].symbol) {
     matched = true;
-    sum += (allSlots[0][0].value + allSlots[1][2].value) * itemAbility(3);
+    sum += (allSlots[0][0].value + allSlots[2][1].value) * itemAbility(3);
   }
   if(matched == false && itemAbility(4) == 2){
     sum += allSlots[0][1].value; 

@@ -26,7 +26,7 @@ bool nextTurn = true;
 bool canDeposit = true;
 int menuIndx = -1;
 int lastIndx = -1;
-
+int totalTickets = 0;
 enum GameResult {
   CONTINUE,
   WIN,
@@ -66,6 +66,7 @@ void gameLoop(){
   }
   if(tickets == 0 && nextTurn){
     nextTurn = false;
+    totalTickets = 0;
     turns -=1;
     canDeposit = (tickets >= 3);
   }
@@ -237,7 +238,7 @@ void handleInput(GameStates &currentState, bool* event = nullptr, bool* select =
           delay(500);
         }
 
-        if (bState == LOW && money > 0 && lastBState == HIGH && tickets < 10) {
+        if (bState == LOW && money > 0 && lastBState == HIGH && totalTickets < 10) {
           money -= 1;
           tickets += 1;
           clearData(4, "Tickets: ", tickets);
@@ -307,7 +308,7 @@ void handleInput(GameStates &currentState, bool* event = nullptr, bool* select =
           }
         }
 
-        if (bState == LOW && menuIndx < shopItemCount && lastBState == HIGH) {
+        if (bState == LOW && menuIndx < (shopItemCount - 1) && lastBState == HIGH) {
           lastIndx = menuIndx;
           menuIndx++;
           delay(500);
@@ -424,10 +425,12 @@ int gameCondition() {
 void nextRound(){
   currentRound += 1;
   updateDebt();
-  clearData(1, "TURNS: ", turns);
-  clearData(2, "Debt: ", debt);
   tokens += turns;
   turns = 5 + (itemAbility(6) != 1 ? itemAbility(6) : 0);
+  deposit = 0;
+  clearData(1, "TURNS: ", turns);
+  clearData(2, "Debt: ", debt);
+  clearData(3, "Deposit: ", deposit);
   shopReset();
 }
 
