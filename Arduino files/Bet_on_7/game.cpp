@@ -69,7 +69,10 @@ void gameLoop(){
     turns -=1;
     canDeposit = (tickets >= 3);
   }
-  if (tickets == 0 && !nextTurn) {
+  if (tickets < 3 && money <= 2) {
+    tickets += (3-tickets);
+  }
+  if (tickets >= 3 && !nextTurn) {
     nextTurn = true;
   }
   ledControl(select);
